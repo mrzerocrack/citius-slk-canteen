@@ -3,7 +3,6 @@ import subprocess
 import threading
 import socket
 from time import *
-import pexpect
 import requests
 import json,urllib.request
 import os
@@ -94,7 +93,7 @@ def send_post_request(url, data):
         return response
     except requests.exceptions.RequestException as e:
         # Handle error and log to file
-        error_message = f"[{datetime.datetime.now()}] Error: {str(e)}"
+        error_message = f"[{datetime.now()}] Error: {str(e)}"
         with open("log_error.txt", "a") as f:
             f.write(error_message + "\n")
         return None
