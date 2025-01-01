@@ -7,10 +7,11 @@ import requests
 import json,urllib.request
 import os
 import paramiko
+from datetime import datetime
 
 reverb_pid = None
 queue_pid = None
-url_api = "http://localhost:8000"
+url_api = "http://192.168.100.199"
 #subprocess.Popen(['php', '../artisan', 'reverb:start'])
 #subprocess.Popen(['php', '../artisan', 'queue:work'])
 
