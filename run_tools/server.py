@@ -143,8 +143,8 @@ def synchronizer():
             add_text("sync_log FAILED PLEASE CEK LOG.")
 
         sync_photo()
-        add_text("TASK DONE\nNEW TASK WILL STARTIN 60MINUTES")
-        sleep(3600)
+        add_text("TASK DONE\nNEW TASK WILL STARTIN 2 MINUTES")
+        sleep(120)
 
 # Buat jendela utama
 window = tk.Tk()
