@@ -29,7 +29,7 @@ def start_reverb():
     try:
         process_reverb = subprocess.Popen(['php', '../artisan', 'reverb:start'])
         reverb_pid = process_reverb.pid
-        add_text(f"Reverb started with PID: {reverb_pid}")
+        add_text(f"[{datetime.now()}] Reverb started with PID: {reverb_pid}")
         process_queue = subprocess.Popen(['php', '../artisan', 'queue:work'])
         queue_pid = process_queue.pid
         add_text(f"[{datetime.now()}] Queue started with PID: {queue_pid}")
