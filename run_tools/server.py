@@ -32,9 +32,9 @@ def start_reverb():
         add_text(f"Reverb started with PID: {reverb_pid}")
         process_queue = subprocess.Popen(['php', '../artisan', 'queue:work'])
         queue_pid = process_queue.pid
-        add_text(f"Queue started with PID: {queue_pid}")
+        add_text(f"[{datetime.now()}] Queue started with PID: {queue_pid}")
     except subprocess.CalledProcessError as e:
-        add_text(f"Error starting Reverb: {str(e)}")
+        add_text(f"[{datetime.now()}] Error starting Reverb: {str(e)}")
 
 def stop_reverb():
     global reverb_pid
@@ -43,20 +43,20 @@ def stop_reverb():
         if reverb_pid:
             subprocess.call(['taskkill', '/PID', str(reverb_pid), '/F'])
             reverb_pid = None
-            add_text("Reverb stopped")
+            add_text(f"[{datetime.now()}] Reverb stopped")
         else:
-            add_text("Reverb is not running")
+            add_text(f"[{datetime.now()}] Reverb is not running")
     except subprocess.CalledProcessError as e:
-        add_text(f"Error stopping Reverb: {str(e)}")
+        add_text(f"[{datetime.now()}] Error stopping Reverb: {str(e)}")
     try:
         if queue_pid:
             subprocess.call(['taskkill', '/PID', str(queue_pid), '/F'])
             queue_pid = None
-            add_text("Queue stopped")
+            add_text(f"[{datetime.now()}] Queue stopped")
         else:
-            add_text("Queue is not running")
+            add_text(f"[{datetime.now()}] Queue is not running")
     except subprocess.CalledProcessError as e:
-        add_text(f"Error stopping Reverb: {str(e)}")
+        add_text(f"[{datetime.now()}] Error stopping Reverb: {str(e)}")
 
 # ... sisanya sama seperti kode sebelumnya
         
@@ -85,7 +85,7 @@ def sync_photo():
 	sftp.close()
 	ssh.close()
 
-	add_text("sync_photo DONE")
+	add_text(f"[{datetime.now()}] sync_photo DONE")
 
 def send_post_request(url, data):
     try:
@@ -109,41 +109,41 @@ def synchronizer():
     while True:
         sync_canteen = send_post_request(url_api+"/api/sync_canteen", {'key_code': 'T()tt3nh@m'})
         if sync_canteen:
-            add_text("sync_canteen DONE")
+            add_text(f"[{datetime.now()}] sync_canteen DONE")
             # Lakukan sesuatu dengan respons jika berhasil
         else:
-            add_text("sync_canteen FAILED PLEASE CEK LOG.")
+            add_text(f"[{datetime.now()}] sync_canteen FAILED PLEASE CEK LOG.")
             
         sync_slp = send_post_request(url_api+"/api/sync_slp", {'key_code': 'T()tt3nh@m'})
         if sync_slp:
-            add_text("sync_slp DONE")
+            add_text(f"[{datetime.now()}] sync_slp DONE")
             # Lakukan sesuatu dengan respons jika berhasil
         else:
-            add_text("sync_slp FAILED PLEASE CEK LOG.")
+            add_text(f"[{datetime.now()}] sync_slp FAILED PLEASE CEK LOG.")
             
         sync_employee = send_post_request(url_api+"/api/sync_employee", {'key_code': 'T()tt3nh@m'})
         if sync_employee:
-            add_text("sync_employee DONE")
+            add_text(f"[{datetime.now()}] sync_employee DONE")
             # Lakukan sesuatu dengan respons jika berhasil
         else:
-            add_text("sync_employee FAILED PLEASE CEK LOG.")
+            add_text(f"[{datetime.now()}] sync_employee FAILED PLEASE CEK LOG.")
             
         sync_employee_cc = send_post_request(url_api+"/api/sync_employee_cc", {'key_code': 'T()tt3nh@m'})
         if sync_employee_cc:
-            add_text("sync_employee_cc DONE")
+            add_text(f"[{datetime.now()}] sync_employee_cc DONE")
             # Lakukan sesuatu dengan respons jika berhasil
         else:
-            add_text("sync_employee_cc FAILED PLEASE CEK LOG.")
+            add_text(f"[{datetime.now()}] sync_employee_cc FAILED PLEASE CEK LOG.")
             
         sync_log = send_post_request(url_api+"/api/sync_log", {'key_code': 'T()tt3nh@m'})
         if sync_log:
-            add_text("sync_log DONE")
+            add_text(f"[{datetime.now()}] sync_log DONE")
             # Lakukan sesuatu dengan respons jika berhasil
         else:
-            add_text("sync_log FAILED PLEASE CEK LOG.")
+            add_text(f"[{datetime.now()}] sync_log FAILED PLEASE CEK LOG.")
 
         sync_photo()
-        add_text("TASK DONE\nNEW TASK WILL STARTIN 2 MINUTES")
+        add_text(f"[{datetime.now()}] TASK DONE\nNEW TASK WILL STARTIN 2 MINUTES")
         sleep(120)
 
 # Buat jendela utama

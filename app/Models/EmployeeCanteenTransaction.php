@@ -35,7 +35,7 @@ class EmployeeCanteenTransaction extends Model
         $check_exist = Employee::where("idcard",$request->card_id);
         if ($check_exist->count() == 0) {
             $msg = "Request Failed\nInvalid Card.\nCARD CODE : {$request->card_id}\nCanteen : Canteen {$canteen_id[$request->canteen_name]}";
-            CanteenTapLog::create(["card_code"=>$request->card_id, "canteen_name"=>$canteen_id[$request->canteen_name], "status"=>0, "description"=>$msg]);
+            CanteenTapLog::create(["card_code"=>$request->card_id, "canteen_name"=>$canteen_id[$request->canteen_name], "status"=>0, "description"=>$msg, "created_at"=>Carbon::now()->format("Y-m-d H:i:s"), "updated_at"=>null]);
             return json_encode(["last_trx"=>json_encode($last_5_trx),"msg"=>$msg, "card_id"=>$request->card_id, "name"=>"Name respon", "time_pause"=>10000,"status"=>0, "idcard"=>$request->card_id, "employee_name"=>"???"]);
         }
         $employee_name = $check_exist->first()->fullname;
