@@ -43,13 +43,13 @@ class EmployeeCanteenTransaction extends Model
         $check_card = EmployeeCanteenCard::where("employee_id", $check_exist->first()->id);
         if ($check_card->count() == 0) {
             $msg = "Request Failed\nThis card is not register yet.\nCARD CODE : {$request->card_id}\nCanteen : Canteen {$canteen_id[$request->canteen_name]}";
-            CanteenTapLog::create(["card_code"=>$request->card_id, "canteen_name"=>$canteen_id[$request->canteen_name], "status"=>0, "description"=>$msg]);
+            CanteenTapLog::create(["card_code"=>$request->card_id, "canteen_name"=>$canteen_id[$request->canteen_name], "status"=>0, "description"=>$msg, "created_at"=>Carbon::now()->format("Y-m-d H:i:s"), "updated_at"=>null]);
             return json_encode(["last_trx"=>json_encode($last_5_trx),"msg"=>$msg, "card_id"=>$request->card_id, "name"=>"Name respon", "time_pause"=>10000,"status"=>0, "idcard"=>$request->card_id, "employee_name"=>"???"]);
         }
 
         if ($check_card->first()->status == 0) {
             $msg = "Request Failed\nThis card is not activated, contact your support.\nCARD CODE : {$request->card_id}\nCanteen : Canteen {$canteen_id[$request->canteen_name]}";
-            CanteenTapLog::create(["card_code"=>$request->card_id, "canteen_name"=>$canteen_id[$request->canteen_name], "status"=>0, "description"=>$msg]);
+            CanteenTapLog::create(["card_code"=>$request->card_id, "canteen_name"=>$canteen_id[$request->canteen_name], "status"=>0, "description"=>$msg, "created_at"=>Carbon::now()->format("Y-m-d H:i:s"), "updated_at"=>null]);
             return json_encode(["last_trx"=>json_encode($last_5_trx),"msg"=>$msg, "card_id"=>$request->card_id, "name"=>"Name respon", "time_pause"=>10000,"status"=>0, "idcard"=>$request->card_id, "employee_name"=>$employee_name]);
         }
         $access_time = ["", "access_breakfast", "access_lunch", "access_dinner"];
@@ -66,14 +66,14 @@ class EmployeeCanteenTransaction extends Model
                 $request->time_category = "3";
             }else{
                 $msg = "{$access_time[$request->time_category]}\nReason : You Tapped outside of meal times. Please press the button to select claim daily meal Slot\nCanteen : Canteen {$canteen_id[$request->canteen_name]}";
-                CanteenTapLog::create(["card_code"=>$request->card_id, "canteen_name"=>$canteen_id[$request->canteen_name], "status"=>0, "description"=>$msg]);
+                CanteenTapLog::create(["card_code"=>$request->card_id, "canteen_name"=>$canteen_id[$request->canteen_name], "status"=>0, "description"=>$msg, "created_at"=>Carbon::now()->format("Y-m-d H:i:s"), "updated_at"=>null]);
                 return json_encode(["last_trx"=>json_encode($last_5_trx),"photo"=>$employee_pic,"msg"=>$msg, "card_id"=>$request->card_id, "name"=>"Name respon", "time_pause"=>10000,"status"=>0, "idcard"=>$request->card_id, "employee_name"=>$employee_name]);
             }
         }
         if($check_card->where([$access_time[$request->time_category] => 1])->count() == 0)
         {
             $msg = "Request Failed\nReason : You dont have access daily meal (".strtoupper($time_category[$request->time_category]).").\nCanteen : Canteen {$canteen_id[$request->canteen_name]}";
-            CanteenTapLog::create(["card_code"=>$request->card_id, "canteen_name"=>$canteen_id[$request->canteen_name], "status"=>0, "description"=>$msg]);
+            CanteenTapLog::create(["card_code"=>$request->card_id, "canteen_name"=>$canteen_id[$request->canteen_name], "status"=>0, "description"=>$msg, "created_at"=>Carbon::now()->format("Y-m-d H:i:s"), "updated_at"=>null]);
         	return json_encode(["last_trx"=>json_encode($last_5_trx),"photo"=>$employee_pic,
                                 "msg"=>$msg,
                                 "card_id"=>$request->card_id,
@@ -88,13 +88,13 @@ class EmployeeCanteenTransaction extends Model
         $tot_trx = $check_canteen_trx->count();
         if ($tot_trx == 1) {
             $msg = "Request Failed\nReason : You have used your card for {$time_category[$request->time_category]}.\nCanteen : Canteen {$canteen_id[$request->canteen_name]}";
-            CanteenTapLog::create(["card_code"=>$request->card_id, "canteen_name"=>$canteen_id[$request->canteen_name], "status"=>0, "description"=>$msg]);
+            CanteenTapLog::create(["card_code"=>$request->card_id, "canteen_name"=>$canteen_id[$request->canteen_name], "status"=>0, "description"=>$msg, "created_at"=>Carbon::now()->format("Y-m-d H:i:s"), "updated_at"=>null]);
             return json_encode(["last_trx"=>json_encode($last_5_trx),"photo"=>$employee_pic,"msg"=>$msg, "card_id"=>$request->card_id, "name"=>"Name respon", "time_pause"=>10000,"status"=>0, "idcard"=>$request->card_id, "employee_name"=>$employee_name]);
         }
         $check_leave = LeaveDetail::where(["employee_id"=>$check_exist->first()->id, ["date_detail","LIKE","%".Carbon::now()->startOfDay()->format("Y-m-d")."%"]]);
         if ($check_leave->count() != 0) {
             $msg = "Request Failed\nReason : Your card cannot be used because you are recorded as being on leave.\nCanteen : Canteen {$canteen_id[$request->canteen_name]}";
-            CanteenTapLog::create(["card_code"=>$request->card_id, "canteen_name"=>$canteen_id[$request->canteen_name], "status"=>0, "description"=>$msg]);
+            CanteenTapLog::create(["card_code"=>$request->card_id, "canteen_name"=>$canteen_id[$request->canteen_name], "status"=>0, "description"=>$msg, "created_at"=>Carbon::now()->format("Y-m-d H:i:s"), "updated_at"=>null]);
             return json_encode(["last_trx"=>json_encode($last_5_trx),"photo"=>$employee_pic,"msg"=>$msg, "card_id"=>$request->card_id, "name"=>"Name respon", "time_pause"=>10000,"status"=>0, "idcard"=>$request->card_id, "employee_name"=>$employee_name]);
         }
         EmployeeCanteenTransaction::insert([
@@ -102,9 +102,10 @@ class EmployeeCanteenTransaction extends Model
             "card_code" => $request->card_id,
             "employee_id" => $check_exist->first()->id,
             "time_category" => $request->time_category,
+            "created_at"=>Carbon::now()->format("Y-m-d H:i:s"),
         ]);
         $msg = "Request Success\nEnjoy your {$time_category[$request->time_category]}\nCanteen : Canteen {$canteen_id[$request->canteen_name]}";
-        CanteenTapLog::create(["card_code"=>$request->card_id, "canteen_name"=>$canteen_id[$request->canteen_name], "status"=>1, "description"=>$msg]);
+        CanteenTapLog::create(["card_code"=>$request->card_id, "canteen_name"=>$canteen_id[$request->canteen_name], "status"=>1, "description"=>$msg, "created_at"=>Carbon::now()->format("Y-m-d H:i:s"), "updated_at"=>null]);
         return json_encode(["last_trx"=>json_encode($last_5_trx),"photo"=>$employee_pic,"msg"=>$msg, "card_id"=>$request->card_id, "name"=>"Name respon", "time_pause"=>5000,"status"=>1, "idcard"=>$request->card_id, "employee_name"=>$employee_name]);
     }
 }
