@@ -70,7 +70,23 @@ def check_reverb_status():
             start_button.config(state=tk.NORMAL)
             stop_button.config(state=tk.DISABLED)
             status_label.config(text="Server is not running, please click start to start the server")
-        sleep(2)  # Periksa setiap 2 detik
+        sleep(1)  # Periksa setiap 1 detik
+        
+def check_web_server_status():
+    while True:
+        if check_port_in_use(80):
+            status_web_server_label.config(text="Web Server is running")
+        else:
+            status_web_server_label.config(text="Web Server is not running, please open XAMPP and start Apache")
+        sleep(1)  # Periksa setiap 1 detik
+        
+def check_mysql_server_status():
+    while True:
+        if check_port_in_use(80):
+            status_mysql_server_label.config(text="mysql Server is running")
+        else:
+            status_mysql_server_label.config(text="mysql Server is not running, please open XAMPP and start Apache")
+        sleep(1)  # Periksa setiap 1 detik
 
 def sync_photo():
 	ssh = paramiko.SSHClient()
@@ -169,11 +185,21 @@ server_label = tk.Label(window, text="")
 server_label.pack()
 status_label = tk.Label(window, text="Server status")
 status_label.pack()
+status_web_server_label = tk.Label(window, text="Server status")
+status_web_server_label.pack()
+status_mysql_server_label = tk.Label(window, text="Server status")
+status_mysql_server_label.pack()
 
-# Mulai thread untuk memeriksa status Reverb
+# Mulai thread untuk memeriksa status Reverb, Mysql, APache
 status_thread = threading.Thread(target=check_reverb_status)
 status_thread.daemon = True  # Agar thread mati ketika program utama selesai
 status_thread.start()
+status_web_server_thread = threading.Thread(target=check_web_server_status)
+status_web_server_thread.daemon = True  # Agar thread mati ketika program utama selesai
+status_web_server_thread.start()
+status_mysql_server_thread = threading.Thread(target=check_mysql_server_status)
+status_mysql_server_thread.daemon = True  # Agar thread mati ketika program utama selesai
+status_mysql_server_thread.start()
 
 # Mulai thread untuk memeriksa status Reverb
 sync_thread = threading.Thread(target=synchronizer)
