@@ -46,9 +46,10 @@ def update_git():
     else:
         # Tampilkan notifikasi berhasil
         if "Already up to date." in result.stdout:
+            add_text(f"[{datetime.now()}] Already up to date")
             tk.messagebox.showinfo("Informasi", "Aplikasi sudah up to date")
         else:
-            tk.messagebox.showinfo("Sukses", "Update selesai, silahkan restart aplikasi")
+            tk.messagebox.showinfo("Sukses", "Update done, please restart the server application")
 
 def start_reverb():
     global reverb_pid
@@ -149,7 +150,6 @@ def add_text(text):
     text_area.see(tk.END)  # Scroll ke bawah secara otomatis
     
 def synchronizer():
-    sleep(6000)
     while True:
         sync_canteen = send_post_request(url_api+"/api/sync_canteen", {'key_code': 'T()tt3nh@m'})
         if sync_canteen:
