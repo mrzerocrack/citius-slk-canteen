@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 import subprocess
 import threading
 import socket
@@ -24,16 +25,6 @@ def check_port_in_use(port):
             return True
 
 def check_mysql_status(host='localhost', port=3306):
-    """
-    Mengecek status MySQL pada host dan port yang ditentukan.
-
-    Args:
-        host (str, optional): Hostname atau alamat IP MySQL server. Defaults to 'localhost'.
-        port (int, optional): Nomor port MySQL server. Defaults to 3306.
-
-    Returns:
-        bool: True jika MySQL sedang berjalan, False jika tidak.
-    """
 
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -42,6 +33,22 @@ def check_mysql_status(host='localhost', port=3306):
             return True
     except (ConnectionRefusedError, socket.timeout):
         return False
+
+def update_git():
+    # Jalankan perintah git pull
+    add_text(f"[{datetime.now()}] Checking for updates")
+    result = subprocess.run(['git', 'pull', 'origin', 'master'], capture_output=True, text=True)
+
+    # Tampilkan pesan error jika ada
+    if result.returncode != 0:
+        error_message = f"Terjadi kesalahan saat melakukan update: {result.stderr}"
+        messagebox.showerror("Error", error_message)
+    else:
+        # Tampilkan notifikasi berhasil
+        if "Already up to date." in result.stdout:
+            tk.messagebox.showinfo("Informasi", "Aplikasi sudah up to date")
+        else:
+            tk.messagebox.showinfo("Sukses", "Update selesai, silahkan restart aplikasi")
 
 def start_reverb():
     global reverb_pid
@@ -142,6 +149,7 @@ def add_text(text):
     text_area.see(tk.END)  # Scroll ke bawah secara otomatis
     
 def synchronizer():
+    sleep(6000)
     while True:
         sync_canteen = send_post_request(url_api+"/api/sync_canteen", {'key_code': 'T()tt3nh@m'})
         if sync_canteen:
@@ -194,6 +202,10 @@ start_button.pack()
 # Buat tombol stop
 stop_button = tk.Button(window, text="Stop Server", command=stop_reverb)
 stop_button.pack()
+
+# Buat tombol update
+update_button = tk.Button(window, text="Update", command=update_git)
+update_button.pack(pady=20)
 
 # Buat text area dengan scrollbar
 text_area = tk.Text(window, height=10)
