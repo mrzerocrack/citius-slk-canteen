@@ -82,10 +82,10 @@ def check_web_server_status():
         
 def check_mysql_server_status():
     while True:
-        if check_port_in_use(80):
+        if check_port_in_use(3306):
             status_mysql_server_label.config(text="mysql Server is running")
         else:
-            status_mysql_server_label.config(text="mysql Server is not running, please open XAMPP and start Apache")
+            status_mysql_server_label.config(text="mysql Server is not running, please open XAMPP and start MySQL")
         sleep(1)  # Periksa setiap 1 detik
 
 def sync_photo():
