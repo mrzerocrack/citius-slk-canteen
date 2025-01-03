@@ -23,6 +23,26 @@ def check_port_in_use(port):
         except OSError:
             return True
 
+def check_mysql_status(host='localhost', port=3306):
+    """
+    Mengecek status MySQL pada host dan port yang ditentukan.
+
+    Args:
+        host (str, optional): Hostname atau alamat IP MySQL server. Defaults to 'localhost'.
+        port (int, optional): Nomor port MySQL server. Defaults to 3306.
+
+    Returns:
+        bool: True jika MySQL sedang berjalan, False jika tidak.
+    """
+
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.settimeout(1)
+            s.connect((host, port))
+            return True
+    except (ConnectionRefusedError, socket.timeout):
+        return False
+
 def start_reverb():
     global reverb_pid
     global queue_pid
@@ -82,7 +102,7 @@ def check_web_server_status():
         
 def check_mysql_server_status():
     while True:
-        if check_port_in_use(3306):
+        if check_mysql_status():
             status_mysql_server_label.config(text="mysql Server is running")
         else:
             status_mysql_server_label.config(text="mysql Server is not running, please open XAMPP and start MySQL")
