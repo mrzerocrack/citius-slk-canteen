@@ -150,7 +150,6 @@ def add_text(text):
     text_area.see(tk.END)  # Scroll ke bawah secara otomatis
     
 def synchronizer():
-    return
     while True:
         sync_canteen = send_post_request(url_api+"/api/sync_canteen", {'key_code': 'T()tt3nh@m'})
         if sync_canteen:
