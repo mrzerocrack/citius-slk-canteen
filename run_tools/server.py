@@ -150,6 +150,7 @@ def add_text(text):
     text_area.see(tk.END)  # Scroll ke bawah secara otomatis
     
 def synchronizer():
+    return
     while True:
         sync_canteen = send_post_request(url_api+"/api/sync_canteen", {'key_code': 'T()tt3nh@m'})
         if sync_canteen:
@@ -199,29 +200,46 @@ def resync():
         sync_thread.daemon = True  # Agar thread mati ketika program utama selesai
         sync_thread.start()
 
+def center_window(root, width=800, height=600):
+    # Mendapatkan ukuran layar
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+
+    # Menghitung posisi x dan y untuk memusatkan jendela
+    x = (screen_width/2) - (width/2)
+    y = (screen_height/2) - (height/2)
+
+    # Mengatur posisi jendela
+    root.geometry('{}x{}+{}+{}'.format(int(width), int(height), int(x), int(y)))
+
+def init_ui(root):
+    # Membuat tombol-tombol memiliki ukuran yang sama dan responsif
+    for button in (start_button, stop_button, update_button, resync_button):
+        button.pack(side=tk.LEFT, expand=True, fill=tk.BOTH)
+
 # Buat jendela utama
 window = tk.Tk()
 window.title("Server Controller")
-window.geometry("800x600")
+center_window(window)
 
-# Buat tombol start
-start_button = tk.Button(window, text="Start Server", command=start_reverb)
-start_button.pack(pady=20,side=tk.LEFT)
 
-# Buat tombol stop
-stop_button = tk.Button(window, text="Stop Server", command=stop_reverb)
-stop_button.pack(pady=20,side=tk.LEFT)
+# Membuat frame untuk mengatur layout
+main_frame = tk.Frame(window)
+main_frame.pack(fill=tk.BOTH, expand=True)
 
-# Buat tombol update
-update_button = tk.Button(window, text="Update", command=update_git)
-update_button.pack(pady=20,side=tk.LEFT)
+# Membuat frame untuk tombol
+button_frame = tk.Frame(main_frame)
+button_frame.pack(fill=tk.X)
 
-# Buat tombol resycn
-resync_button = tk.Button(window, text="Resync", command=resync)
-resync_button.pack(pady=20,side=tk.LEFT)
+# Membuat tombol-tombol
+start_button = tk.Button(button_frame, text="Start Server", command=start_reverb)
+stop_button = tk.Button(button_frame, text="Stop Server", command=stop_reverb)
+update_button = tk.Button(button_frame, text="Update", command=update_git)
+resync_button = tk.Button(button_frame, text="Resync", command=resync)
+init_ui(window)
 
 # Buat text area dengan scrollbar
-text_area = tk.Text(window, height=10)
+text_area = tk.Text(main_frame)
 text_area.configure(state=tk.DISABLED)
 text_area.pack(fill="both", expand=True)
 
