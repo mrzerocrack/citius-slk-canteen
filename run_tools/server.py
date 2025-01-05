@@ -190,6 +190,15 @@ def synchronizer():
         add_text(f"[{datetime.now()}] TASK DONE\nNEW TASK WILL STARTIN 2 MINUTES")
         sleep(120)
 
+def resync():
+    if sync_thread.is_alive():
+        print("Synchronizer is still running")
+    else:
+        print("Synchronizer has stopped. Restarting...")
+        sync_thread = threading.Thread(target=synchronizer)
+        sync_thread.daemon = True  # Agar thread mati ketika program utama selesai
+        sync_thread.start()
+
 # Buat jendela utama
 window = tk.Tk()
 window.title("Server Controller")
@@ -197,15 +206,19 @@ window.geometry("800x600")
 
 # Buat tombol start
 start_button = tk.Button(window, text="Start Server", command=start_reverb)
-start_button.pack()
+start_button.pack(pady=20,side=tk.LEFT)
 
 # Buat tombol stop
 stop_button = tk.Button(window, text="Stop Server", command=stop_reverb)
-stop_button.pack()
+stop_button.pack(pady=20,side=tk.LEFT)
 
 # Buat tombol update
 update_button = tk.Button(window, text="Update", command=update_git)
-update_button.pack(pady=20)
+update_button.pack(pady=20,side=tk.LEFT)
+
+# Buat tombol resycn
+resync_button = tk.Button(window, text="Resync", command=resync)
+resync_button.pack(pady=20,side=tk.LEFT)
 
 # Buat text area dengan scrollbar
 text_area = tk.Text(window, height=10)
