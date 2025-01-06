@@ -191,6 +191,7 @@ def synchronizer():
         sleep(120)
 
 def resync():
+    global sync_thread
     if sync_thread.is_alive():
         print("Synchronizer is still running")
     else:
