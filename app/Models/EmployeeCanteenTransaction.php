@@ -28,8 +28,8 @@ class EmployeeCanteenTransaction extends Model
             $msg = Employee::employee_name_dept($value->employee_id) . " Date : " . $value->created_at;
             array_push($last_5_trx, $msg);
         }
-        $time_category = ["", "Breakfast", "Lunch", "Dinner"];
-        if ((int)$request->time_category > 3) {
+        $time_category = ["", "Breakfast", "Lunch", "Dinner", "Suhoor"];
+        if ((int)$request->time_category > 4) {
             return;
         }
         $check_exist = Employee::where("idcard",$request->card_id);
@@ -52,7 +52,7 @@ class EmployeeCanteenTransaction extends Model
             CanteenTapLog::create(["card_code"=>$request->card_id, "canteen_name"=>$canteen_id[$request->canteen_name], "status"=>0, "description"=>$msg, "created_at"=>Carbon::now()->format("Y-m-d H:i:s"), "updated_at"=>null]);
             return json_encode(["last_trx"=>json_encode($last_5_trx),"msg"=>$msg, "card_id"=>$request->card_id, "name"=>"Name respon", "time_pause"=>10000,"status"=>0, "idcard"=>$request->card_id, "employee_name"=>$employee_name]);
         }
-        $access_time = ["", "access_breakfast", "access_lunch", "access_dinner"];
+        $access_time = ["", "access_breakfast", "access_lunch", "access_dinner", "access_suhoor"];
         $employee_pic = $check_exist->first()->photo_pic;
         if ($request->time_category == "") {
             $request->time_category = "0";
@@ -64,6 +64,8 @@ class EmployeeCanteenTransaction extends Model
                 $request->time_category = "2";
             }elseif (Carbon::now() >= Carbon::createFromFormat("Y-m-d H:i", Carbon::now()->format("Y-m-d") . "16:30") && Carbon::now() <= Carbon::createFromFormat("Y-m-d H:i", Carbon::now()->format("Y-m-d") . "20:00")) {
                 $request->time_category = "3";
+            }elseif (Carbon::now() >= Carbon::createFromFormat("Y-m-d H:i", Carbon::now()->format("Y-m-d") . "02:00") && Carbon::now() <= Carbon::createFromFormat("Y-m-d H:i", Carbon::now()->format("Y-m-d") . "05:00")) {
+                $request->time_category = "4";
             }else{
                 $msg = "{$access_time[$request->time_category]}\nReason : You Tapped outside of meal times. Please press the button to select claim daily meal Slot\nCanteen : Canteen {$canteen_id[$request->canteen_name]}";
                 CanteenTapLog::create(["card_code"=>$request->card_id, "canteen_name"=>$canteen_id[$request->canteen_name], "status"=>0, "description"=>$msg, "created_at"=>Carbon::now()->format("Y-m-d H:i:s"), "updated_at"=>null]);
