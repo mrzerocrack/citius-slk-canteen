@@ -1,0 +1,22 @@
+[Unit]
+Description=Canteen sync endpoints loop (Laravel Artisan)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/var/www/citius-slk-canteen
+ExecStart=/usr/bin/php artisan canteen:sync-loop
+Restart=always
+RestartSec=5
+# Change this to the user that owns the project directory
+User=kalteng1-server-vm04
+
+# Optional environment overrides (Laravel still reads .env)
+#Environment=SYNC_HOST_URL=http://sks.canteen
+#Environment=SYNC_PREFIX=api
+#Environment=SYNC_INTERVAL=600
+
+[Install]
+WantedBy=multi-user.target
+

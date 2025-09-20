@@ -1,0 +1,19 @@
+[Unit]
+Description=Employee photos rsync loop
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /var/www/citius-slk-canteen/run_tools/employee_photos_rsync.sh
+Restart=always
+RestartSec=10
+# Change this to the user that owns the destination directory
+User=kalteng1-server-vm04
+
+# Optional: load password from env file (DO NOT COMMIT the file with secrets)
+EnvironmentFile=-/var/www/citius-slk-canteen/run_tools/rsync.env
+
+[Install]
+WantedBy=multi-user.target
+

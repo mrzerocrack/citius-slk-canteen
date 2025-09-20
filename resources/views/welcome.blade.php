@@ -149,7 +149,7 @@
             $("#employee-name").html(data.employee_name);
             $("#employee-card-id").html("Card : " + data.idcard);
             if (data.hasOwnProperty('photo')) {
-              $("#photo-employee-img").prop("src", "{{URL::to('')}}" + data.photo);
+              $("#photo-employee-img").prop("src", "{{URL::to('')}}/" + data.photo);
               $("#photo-employee").css("display", "block");
             }
             $("#employee-name").css("display", "block");

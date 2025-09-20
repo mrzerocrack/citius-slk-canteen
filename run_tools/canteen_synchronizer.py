@@ -6,6 +6,7 @@ import json,urllib.request
 import os
 import paramiko
 
+global host_url = "http://sks.canteen/"
 def sync_photo():
 	ssh = paramiko.SSHClient()
 	ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -34,35 +35,35 @@ def send_post_request(url, data):
         return None
 
 while True:
-    sync_canteen = send_post_request("http://localhost:8000/api/sync_canteen", {'key_code': 'T()tt3nh@m'})
+    sync_canteen = send_post_request(host_url+"api/sync_canteen", {'key_code': 'T()tt3nh@m'})
     if sync_canteen:
         print("sync_canteen DONE")
         # Lakukan sesuatu dengan respons jika berhasil
     else:
         print("sync_canteen FAILED PLEASE CEK LOG.")
         
-    sync_slp = send_post_request("http://localhost:8000/api/sync_slp", {'key_code': 'T()tt3nh@m'})
+    sync_slp = send_post_request(host_url+"api/sync_slp", {'key_code': 'T()tt3nh@m'})
     if sync_slp:
         print("sync_slp DONE")
         # Lakukan sesuatu dengan respons jika berhasil
     else:
         print("sync_slp FAILED PLEASE CEK LOG.")
         
-    sync_employee = send_post_request("http://localhost:8000/api/sync_employee", {'key_code': 'T()tt3nh@m'})
+    sync_employee = send_post_request(host_url+"api/sync_employee", {'key_code': 'T()tt3nh@m'})
     if sync_employee:
         print("sync_employee DONE")
         # Lakukan sesuatu dengan respons jika berhasil
     else:
         print("sync_employee FAILED PLEASE CEK LOG.")
         
-    sync_employee_cc = send_post_request("http://localhost:8000/api/sync_employee_cc", {'key_code': 'T()tt3nh@m'})
+    sync_employee_cc = send_post_request(host_url+"api/sync_employee_cc", {'key_code': 'T()tt3nh@m'})
     if sync_employee_cc:
         print("sync_employee_cc DONE")
         # Lakukan sesuatu dengan respons jika berhasil
     else:
         print("sync_employee_cc FAILED PLEASE CEK LOG.")
         
-    sync_log = send_post_request("http://localhost:8000/api/sync_log", {'key_code': 'T()tt3nh@m'})
+    sync_log = send_post_request(host_url+"api/sync_log", {'key_code': 'T()tt3nh@m'})
     if sync_log:
         print("sync_log DONE")
         # Lakukan sesuatu dengan respons jika berhasil
