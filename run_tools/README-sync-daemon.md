@@ -57,7 +57,11 @@ Requires root to install services.
 - `sudo cp run_tools/employee-photos-rsync.service /etc/systemd/system/`
 
 2) Adjust the user in the unit files if needed:
-- Edit `User=` to the user that owns the project and has permissions to write destination folders (e.g., `kalteng1-server-vm04`).
+- For rsync, easiest is run as `www-data` (owner of destination path). The bundled unit already sets `User=www-data` and `Group=www-data`.
+- Alternatively, if you run as another user (e.g., `kalteng1-server-vm04`), ensure permissions allow writing:
+  - `sudo usermod -a -G www-data <user>` (then re-login or `sudo systemctl restart` the service after a reboot)
+  - `sudo chmod 2775 /var/www/citius-slk-canteen/public/assets/images/employee` (setgid to keep group)
+  - Ensure group owner is `www-data`: `sudo chgrp -R www-data /var/www/citius-slk-canteen/public/assets/images/employee`
 
 3) Optional: Provide rsync password via env file (if using password auth):
 - `cp run_tools/rsync.env.example run_tools/rsync.env`
@@ -86,4 +90,3 @@ If you prefer not to use systemd:
 - Storing passwords in files is risky. Prefer SSH keys whenever possible.
 - The Artisan command logs failures to `storage/logs/laravel.log`.
 - Both loops are infinite by design. Use systemd `Restart=always` to keep them alive.
-
